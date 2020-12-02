@@ -14,10 +14,20 @@ library(textrecipes)
 library(themis)
 library(stopwords)
 library(tidytext)
+library(ranger)
+library(kernlab)
+library(glmnet)
+library(fastDummies)
+library(xgboost)
+library(bench)
+library(vip)
+library(xgboost)
+library(openxlsx)
+
 
 
 #initialize a new project-local environment with a private R library
-renv::init()
+#renv::init()
 
 #read in data files
 df <- read_csv('fake_job_postings.csv')
@@ -73,6 +83,48 @@ recipe <- recipe(fraudulent ~ ., data = train_df) %>%
   step_smote(fraudulent) #generate new examples of the minority class using nearest neighbors 
 
 
+#multiple model function
+mod_iter <- function(spec, engine) {
+  
+  #set model parameters
+  mod <-
+    spec() %>%
+    set_engine(engine, verbose = 2) %>%
+    set_mode("classification")
+  
+  #workflow
+  set.seed(345)
+  wf <- workflow() %>%
+    add_model(mod) %>%
+    add_recipe(recipe)
+  
+  #fit model
+  fit <- wf %>%
+    fit(data = train_df)
+  
+  #predict on test data
+  fraud_predict <- predict(fit, test_df, type = "prob") %>% 
+    bind_cols(test_df %>% select_all()) 
+  
+  #roc curve
+  roc_curve <- fraud_predict %>% 
+    roc_curve(truth = fraudulent, .pred_1) %>% 
+    autoplot()
+  
+  #roc auc
+  roc_auc <- fraud_predict %>% 
+    roc_auc(truth = fraudulent, .pred_1)
+  
+  return(list(fit, fraud_predict, roc_curve, roc_auc))
+  
+}
+
+
+spec<- c(boost_tree, rand_forest)
+engine <- c('xgboost', 'ranger')
+
+results <-  bench::mark(check = FALSE,
+                        models_info <- purrr::pmap(list(spec,engine), mod_iter))
 
 #snapshot packages
 renv::snapshot()
