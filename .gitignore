@@ -2,3 +2,6 @@
 fake_job_postings.csv
 /renv
 .Rproj.user/
+.Rhistory
+*.RDS
+test_df_predictions.csv

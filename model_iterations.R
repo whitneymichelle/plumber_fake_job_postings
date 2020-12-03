@@ -15,15 +15,9 @@ library(themis)
 library(stopwords)
 library(tidytext)
 library(ranger)
-library(kernlab)
-library(glmnet)
-library(fastDummies)
-library(xgboost)
 library(bench)
-library(vip)
 library(xgboost)
 library(openxlsx)
-
 
 
 #initialize a new project-local environment with a private R library
@@ -125,6 +119,16 @@ engine <- c('xgboost', 'ranger')
 
 results <-  bench::mark(check = FALSE,
                         models_info <- purrr::pmap(list(spec,engine), mod_iter))
+
+saveRDS(results, "benchmark_results.RDS")
+
+#compare AUC values, ranger higher
+models_info[[1]][[4]]#.972
+models_info[[2]][[4]]#.990
+
+saveRDS(models_info[[2]][[1]], "ranger_model.RDS")
+write_csv(models_info[[2]][[2]], "test_df_predictions.csv" )
+ggsave(paste0("roc_curve_plot.png"), models_info[[2]][[3]])
 
 #snapshot packages
 renv::snapshot()
