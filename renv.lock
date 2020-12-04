@@ -366,13 +366,6 @@
       "Repository": "CRAN",
       "Hash": "dad6793a5a1f73c8e91f1a1e3e834b05"
     },
-    "fastDummies": {
-      "Package": "fastDummies",
-      "Version": "1.6.2",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "e776184c9213cf1879c2f2f70ecf83b0"
-    },
     "fastmatch": {
       "Package": "fastmatch",
       "Version": "1.1-0",
@@ -450,13 +443,6 @@
       "Repository": "CRAN",
       "Hash": "ceb3cc7bcf372186ade7954427f30d42"
     },
-    "glmnet": {
-      "Package": "glmnet",
-      "Version": "4.0-2",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "056100917c75e6f8a0d36f8bdd552799"
-    },
     "globals": {
       "Package": "globals",
       "Version": "0.14.0",
@@ -477,13 +463,6 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "be6a2b3529928bd803d1c437d1d43152"
-    },
-    "gridExtra": {
-      "Package": "gridExtra",
-      "Version": "2.3",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "7d7f283939f563670a697165b2cf5560"
     },
     "gtable": {
       "Package": "gtable",
@@ -596,13 +575,6 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "1ec84e070b88b37ed169f19def40d47c"
-    },
-    "kernlab": {
-      "Package": "kernlab",
-      "Version": "0.9-29",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "46b2f61dadae64579e4cbe8af3c088d6"
     },
     "knitr": {
       "Package": "knitr",
@@ -996,13 +968,6 @@
       "Repository": "CRAN",
       "Hash": "3838071b66e0c566d55cc26bd6e27bf4"
     },
-    "shape": {
-      "Package": "shape",
-      "Version": "1.4.5",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "58510f25472de6fd363d76698d29709e"
-    },
     "skimr": {
       "Package": "skimr",
       "Version": "2.1.2",
@@ -1177,13 +1142,6 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "d25c5bea636cf892edbfd64fc3d20c20"
-    },
-    "vip": {
-      "Package": "vip",
-      "Version": "0.2.2",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "ca6163837c7c626b16f7911f73bc4d8c"
     },
     "viridisLite": {
       "Package": "viridisLite",

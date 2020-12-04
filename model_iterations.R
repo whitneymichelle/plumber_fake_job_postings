@@ -2,7 +2,7 @@
 #setwd("D:/fake_job_postings_project")
 
 #clean env
-#rm(list = ls())
+rm(list = ls())
 
 #load libraries
 library(renv)
@@ -18,6 +18,7 @@ library(ranger)
 library(bench)
 library(xgboost)
 library(openxlsx)
+library(vip)
 
 
 #initialize a new project-local environment with a private R library
@@ -83,7 +84,7 @@ mod_iter <- function(spec, engine) {
   #set model parameters
   mod <-
     spec() %>%
-    set_engine(engine, verbose = 2) %>%
+    set_engine(engine) %>%
     set_mode("classification")
   
   #workflow
@@ -109,26 +110,33 @@ mod_iter <- function(spec, engine) {
   roc_auc <- fraud_predict %>% 
     roc_auc(truth = fraudulent, .pred_1)
   
-  return(list(fit, fraud_predict, roc_curve, roc_auc))
+  # variable importance plot
+  vip_img <- fit %>%
+    pull_workflow_fit() %>%
+    vip(num_features = 30)
+  
+  return(list(fit, fraud_predict, roc_curve, roc_auc, vip_img))
   
 }
 
 
-spec<- c(boost_tree, rand_forest)
-engine <- c('xgboost', 'ranger')
+spec<- c(boost_tree, logistic_reg)
+engine <- c('xgboost', 'glm')
 
 results <-  bench::mark(check = FALSE,
                         models_info <- purrr::pmap(list(spec,engine), mod_iter))
+
 
 saveRDS(results, "benchmark_results.RDS")
 
 #compare AUC values, ranger higher
 models_info[[1]][[4]]#.972
-models_info[[2]][[4]]#.990
+models_info[[2]][[4]]#.884, did not converge
 
-saveRDS(models_info[[2]][[1]], "ranger_model.RDS")
-write_csv(models_info[[2]][[2]], "test_df_predictions.csv" )
-ggsave(paste0("roc_curve_plot.png"), models_info[[2]][[3]])
+saveRDS(models_info[[1]][[1]], "xgboost_model.RDS")
+write_csv(models_info[[1]][[2]], "test_df_predictions.csv" )
+ggsave("roc_curve_plot.png", models_info[[2]][[3]])
+ggsave("vip_plot.png", models_info[[2]][[5]])
 
 #snapshot packages
 renv::snapshot()
