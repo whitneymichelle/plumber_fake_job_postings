@@ -464,6 +464,13 @@
       "Repository": "CRAN",
       "Hash": "be6a2b3529928bd803d1c437d1d43152"
     },
+    "gridExtra": {
+      "Package": "gridExtra",
+      "Version": "2.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "7d7f283939f563670a697165b2cf5560"
+    },
     "gtable": {
       "Package": "gtable",
       "Version": "0.3.0",
@@ -842,6 +849,13 @@
       "Repository": "CRAN",
       "Hash": "97def703420c8ab10d8f0e6c72101e02"
     },
+    "randomForest": {
+      "Package": "randomForest",
+      "Version": "4.6-14",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "6367ba8128568cc5ebf8082e440948e4"
+    },
     "ranger": {
       "Package": "ranger",
       "Version": "0.12.1",
@@ -1142,6 +1156,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "d25c5bea636cf892edbfd64fc3d20c20"
+    },
+    "vip": {
+      "Package": "vip",
+      "Version": "0.2.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "ca6163837c7c626b16f7911f73bc4d8c"
     },
     "viridisLite": {
       "Package": "viridisLite",

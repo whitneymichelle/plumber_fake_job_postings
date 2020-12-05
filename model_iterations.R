@@ -14,18 +14,17 @@ library(textrecipes)
 library(themis)
 library(stopwords)
 library(tidytext)
-library(ranger)
 library(bench)
 library(xgboost)
 library(openxlsx)
 library(vip)
+library(randomForest)
 
 
 #initialize a new project-local environment with a private R library
 #renv::init()
 
 #read in data files
-df <- read_csv('fake_job_postings.csv')
 
 #modifying data frame
 df2 <- df %>% 
@@ -120,8 +119,8 @@ mod_iter <- function(spec, engine) {
 }
 
 
-spec<- c(boost_tree, logistic_reg)
-engine <- c('xgboost', 'glm')
+spec<- c(boost_tree, rand_forest)
+engine <- c('xgboost', 'randomForest')
 
 results <-  bench::mark(check = FALSE,
                         models_info <- purrr::pmap(list(spec,engine), mod_iter))
@@ -131,10 +130,10 @@ saveRDS(results, "benchmark_results.RDS")
 
 #compare AUC values, ranger higher
 models_info[[1]][[4]]#.972
-models_info[[2]][[4]]#.884, did not converge
+models_info[[2]][[4]]#.992
 
-saveRDS(models_info[[1]][[1]], "xgboost_model.RDS")
-write_csv(models_info[[1]][[2]], "test_df_predictions.csv" )
+saveRDS(models_info[[2]][[1]], "rf_model.RDS")
+write_csv(models_info[[2]][[2]], "test_df_predictions.csv" )
 ggsave("roc_curve_plot.png", models_info[[2]][[3]])
 ggsave("vip_plot.png", models_info[[2]][[5]])
 
