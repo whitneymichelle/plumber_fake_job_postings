@@ -5,6 +5,53 @@ library(randomForest)
 
 model <- readRDS("rf_model.RDS")
 
+#* Log some information about incoming request
+#* @filter logger
+
+function(req) {
+  cat(as.character(Sys.time()), "-", 
+      req$REQUEST_METHOD, req$PATH_INFO, "-",
+      req$HTTP_USER_AGENT, "@", request$REMOTE_ADDR, "\n")
+  
+  #forward the request
+  forward()
+}
+
+#* Parse and predict on model for future endpoints
+#* @filter predict
+function(req, res) {
+  
+  if(str_detect(req$PATH_INFO, "predict")) {
+        req$predict_data <- as_tibble(req$postBody)
+      
+    if(is.na(req$predict_data)) {
+      res$status <- 400
+      return(list(error = "No data included in request body."))
+    }
+    
+  else #predict values based in postBody and store in req
+        req$predicted_values(model, req$predict_data)
+        
+  }
+  
+   #forward the request
+  forward()
+}
+
+#* Predict whether fradulent job posting
+#* @post predict/values
+function(req) {
+  req$predicted_values
+}
+
+#* predicted values in HTML table
+#* @html
+#* @post
+function(req, res) {
+  table_data <- colu
+}
+
+
 #* Return whether job posting if fake 
 #* @param title text
 #* @param company_profile text
