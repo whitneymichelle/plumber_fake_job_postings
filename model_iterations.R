@@ -25,6 +25,7 @@ library(randomForest)
 #renv::init()
 
 #read in data files
+df <- read_csv("fake_job_postings.csv")
 
 #modifying data frame
 df2 <- df %>% 
@@ -97,24 +98,32 @@ mod_iter <- function(spec, engine) {
     fit(data = train_df)
   
   #predict on test data
-  fraud_predict <- predict(fit, test_df, type = "prob") %>% 
+  fraud_predict_p <- predict(fit, test_df, type = "prob") %>% 
     bind_cols(test_df %>% select_all()) 
-  
+ 
+  fraud_predict_c <- predict(fit, test_df, type = "class") %>% 
+    bind_cols(test_df %>% select_all()) 
+   
   #roc curve
-  roc_curve <- fraud_predict %>% 
+  roc_curve <- fraud_predict_p %>% 
     roc_curve(truth = fraudulent, .pred_1) %>% 
     autoplot()
   
   #roc auc
-  roc_auc <- fraud_predict %>% 
+  roc_auc <- fraud_predict_p %>% 
     roc_auc(truth = fraudulent, .pred_1)
+  
+  #confusion matrix
+  conf_matrix <- fraud_predict_c %>%
+    conf_mat(fraudulent, .pred_class)
+  
   
   # variable importance plot
   vip_img <- fit %>%
     pull_workflow_fit() %>%
     vip(num_features = 30)
   
-  return(list(fit, fraud_predict, roc_curve, roc_auc, vip_img))
+  return(list(fit, fraud_predict, roc_curve, roc_auc, vip_img, conf_matrix))
   
 }
 
@@ -133,9 +142,18 @@ models_info[[1]][[4]]#.972
 models_info[[2]][[4]]#.992
 
 saveRDS(models_info[[2]][[1]], "rf_model.RDS")
-write_csv(models_info[[2]][[2]], "test_df_predictions.csv" )
-ggsave("roc_curve_plot.png", models_info[[2]][[3]])
-ggsave("vip_plot.png", models_info[[2]][[5]])
+saveRDS(models_info[[2]][[6]], "rf_conf_mat.RDS")
+write_csv(models_info[[2]][[2]], "rf_test_df_predictions.csv" )
+ggsave("rf_roc_curve_plot.png", models_info[[2]][[3]])
+ggsave("rf_vip_plot.png", models_info[[2]][[5]])
+
+
+saveRDS(models_info[[1]][[1]], "xgb_model.RDS")
+saveRDS(models_info[[1]][[6]], "xgb_conf_mat.RDS")
+write_csv(models_info[[1]][[2]], "xgb_test_df_predictions.csv" )
+ggsave("xgb_roc_curve_plot.png", models_info[[1]][[3]])
+ggsave("xgb_vip_plot.png", models_info[[1]][[5]])
+
 
 #snapshot packages
 renv::snapshot()
