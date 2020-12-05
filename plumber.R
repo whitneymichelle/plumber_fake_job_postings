@@ -1,4 +1,5 @@
 library(plumber)
+library(randomForest)
 
 #* @apiTitle Fake Job Postings API
 
@@ -53,7 +54,7 @@ function(title, company_profile, description, requirements, telecommuting, has_c
       city_present = as.numeric(city_present)
     )
 
-predictions <-  predict(model, model_data) %>% pluck()
+predictions <-  predict(model, model_data) %>% case_when(.pred = )
 
 return(predictions)
 
@@ -61,3 +62,4 @@ return(predictions)
 
 
 
+plumb(file='plumber.R')$run()
