@@ -19,6 +19,7 @@ library(xgboost)
 library(openxlsx)
 library(vip)
 library(randomForest)
+library(probably)
 
 
 #initialize a new project-local environment with a private R library
@@ -123,7 +124,7 @@ mod_iter <- function(spec, engine) {
     pull_workflow_fit() %>%
     vip(num_features = 30)
   
-  return(list(fit, fraud_predict, roc_curve, roc_auc, vip_img, conf_matrix))
+  return(list(fit, fraud_predict_p, roc_curve, roc_auc, vip_img, conf_matrix))
   
 }
 
@@ -153,6 +154,16 @@ saveRDS(models_info[[1]][[6]], "xgb_conf_mat.RDS")
 write_csv(models_info[[1]][[2]], "xgb_test_df_predictions.csv" )
 ggsave("xgb_roc_curve_plot.png", models_info[[1]][[3]])
 ggsave("xgb_vip_plot.png", models_info[[1]][[5]])
+
+##chose xgboost for its higher sensitivity
+#explore peformance metrics across different probability thresholds
+fraud_predict_p <- predict(models_info[[1]][[1]], test_df, type = "prob") %>% 
+  bind_cols(test_df %>% select_all()) 
+
+thresholds_performance <- threshold_perf(fraud_predict_p, fraudulent, .pred_1) %>%
+       pivot_wider(names_from = .metric, values_from = .estimate)%>%
+      write_csv("performance_across_probs.csv")
+
 
 
 #snapshot packages
