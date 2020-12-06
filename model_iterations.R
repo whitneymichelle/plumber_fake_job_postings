@@ -156,7 +156,7 @@ ggsave("xgb_roc_curve_plot.png", models_info[[1]][[3]])
 ggsave("xgb_vip_plot.png", models_info[[1]][[5]])
 
 ##chose xgboost for its higher sensitivity
-#explore peformance metrics across different probability thresholds
+#explore performance metrics across different probability thresholds
 fraud_predict_p <- predict(models_info[[1]][[1]], test_df, type = "prob") %>% 
   bind_cols(test_df %>% select_all()) 
 
