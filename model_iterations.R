@@ -58,6 +58,9 @@ df2 <- df %>%
       mutate_if(is.character, str_trim)%>% #get rid of white space in some character columns
       clean_names()
 
+#inspect df2 parameters
+#skim(df2)
+
 #split data into test and training sets
 set.seed(345)
 split <- initial_split(df2, prop = .80)
@@ -165,7 +168,6 @@ thresholds_performance <- threshold_perf(fraud_predict_p, fraudulent, .pred_1) %
       write_csv("performance_across_probs.csv")
 
 
-
-#snapshot packages
+#snapshot/update packages
 renv::snapshot()
 
