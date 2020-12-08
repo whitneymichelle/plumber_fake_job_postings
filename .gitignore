@@ -1,0 +1,7 @@
+.Rprofile
+fake_job_postings.csv
+.Rproj.user/
+.Rhistory
+*.RDS
+test_df_predictions.csv
+.Rproj
