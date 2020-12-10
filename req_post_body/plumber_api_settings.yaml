@@ -1,0 +1,128 @@
+# api-spec.yaml
+openapi: 3.0.0
+servers:
+  - description: Localhost
+    url: http://127.0.0.1:3717
+info:
+  description: This is a plumber api with the spec defined in an external file
+  version: "1.0.0"
+  title: Fake Job Postings API
+
+paths:
+  /predict:
+    post:
+      summary: Predicts fake job postings
+      description: |
+        Input a dataframe and have predictions returned in JSON
+      parameters:
+        - in: query
+          name: title
+          description: title of job posting
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: company_profile
+          description: company profile in job posting
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: description
+          description: description in job posting
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: requirements
+          description: requirements of job in job posting
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: telecommuting
+          description: 1 if job can be telecommuted, 0 if not
+          required: true
+          schema:
+            type: integer
+        - in: query
+          name: has_company_logo
+          description: 1 if posting has company logo, 0 if not
+          required: true
+          schema:
+            type: integer
+        - in: query
+          name: has_questions
+          description: 1 if posting has questions, 0 if not
+          required: true
+          schema:
+            type: integer
+        - in: query
+          name: employment_type 
+          description: employment type, factor (Other, Full-time, unknown, Contract, Temporary, Part-time)
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: required_experience
+          description: required experience, factor (Internship, Not Applicable, unknown, Mid-Senior level Associate, Entry level, Executive, Director).
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: required_education
+          description: required education, factor (unknown, Bachelor's Degree, Master's Degree, High School or equivalent, Unspecified, Some College Coursework Completed, Vocational, Certification, Associate Degree, Professional, Doctorate, Some High School Coursework, Vocational - Degree, Vocational - HS Diploma, Some High School Coursework).
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: department_present
+          description: department present (1), not (0)
+          required: true
+          schema:
+            type: integer
+        - in: query
+          name: salary_range_present
+          description: salary range present (1), not (0)
+          required: true
+          schema:
+            type: integer
+        - in: query
+          name: benefits_present
+          description: benefits present (1), not (0)
+          required: true
+          schema:
+            type: integer
+        - in: query
+          name: industry_present
+          description: industry present (1), not (0)
+          required: true
+          schema:
+            type: integer
+        - in: query
+          name: function_present
+          description: function present (1), not (0)
+          required: true
+          schema:
+            type: integer
+        - in: query
+          name: country_present
+          description: country present (1), not (0)
+          required: true
+          schema:
+            type: integer
+        - in: query
+          name: state_present
+          description: state present (1), not (0)
+          required: true
+          schema:
+            type: integer
+        - in: query
+          name: city_present
+          description: country present (1), not (0)
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: successful message;
