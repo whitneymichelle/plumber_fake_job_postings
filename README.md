@@ -36,15 +36,17 @@ Because of the size of the data file, only a 10 percent sample of the data is sh
 
 - `model_iterations_output/` folder contains the confusion matrices, roc_auc metrics/curves, important variable plots, and CSVs of test dataframe with prediction probabilities for the models as well as a CSV of performance across different probabilities for the xgboost model. Models are not saved as R objects in the repository; however, the script does save both models that are created and the final chosen model needs to be loaded to the `plumber_api_files/plumber_api.R` file to build the api.
 
-- `plumber_api_files/` folder contains 
+- `plumber_api_files/` folder contains: 
    - `plumber_api.R`: sets up structure of the api
-   - `plumber_api_settings.yaml`: defines parameters of the api, and openapi can be further customized
-   - `plumber_entrypoint.R` : reads in `plumber_api.R` file and `plumber_api_settings.yaml` to run api
+   - `plumber_entrypoint.R` : reads in `plumber_api.R` file
+
+- `req_post_body_folder/` folder contains:
+  - `plumber_api_settings.yaml`: defines parameters of the api, and openapi can be further customized
+  - anticipate adding files that use req$postBody as api becomes more complex
 
 ## Instructions
 1. Run `model_iterations.R` file, which saves two models. Choose the model that performs best based on your criteria
 2. Load chosen model into `plumber_api_files/plumber_api.R`
-3. Check/update/edit api settings`plumber_api_files/plumber_api_setting.R` to your specifications but will work as-is.
 4. Run `plumber_entrypoint.R`, which runs the api in your localhost
 
 ## R Session Information
