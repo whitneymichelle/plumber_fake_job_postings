@@ -32,29 +32,20 @@ df <- read_csv("fake_job_postings.csv")
 df2 <- df %>% 
       separate(location, c("country", "state", "city")) %>%
       select(-job_id) %>% 
-      mutate(department_present = case_when(is.na(department) ~ 0,
-                                        TRUE ~ 1)) %>%
       mutate(salary_range_present = case_when( (is.na(salary_range) | str_detect(salary_range, "[:alpha:]"))~0,
-                                          TRUE ~ 1)) %>%
-      mutate(benefits_present = case_when(is.na(benefits)~0,
                                            TRUE ~ 1)) %>%
-      mutate(industry_present = case_when(is.na(industry)~0,
-                                      TRUE ~ 1)) %>%
-      mutate(function_present = case_when(is.na(`function`)~0,
-                                      TRUE ~ 1)) %>%
-      mutate(country_present = case_when(str_detect(country, "[:alpha:]") ~ 1,
-                                                    TRUE ~ 0))%>%
-      mutate(state_present = case_when(str_detect(state, "[:alpha:]") ~ 1,
-                                                TRUE ~ 0))%>%
-      mutate(city_present = case_when(str_detect(city, "[:alpha:]") ~ 1,
-                                              TRUE ~ 0))%>%
+      mutate_at(c("department", "benefits", "industry", "function"),  ~case_when(is.na(.) ~ 0,
+                                                                                TRUE ~ 1)) %>%
+      rename_at(c("department", "benefits", "industry", "function"),  ~str_c(., "_", "present")) %>%
+      mutate_at(c("country", "state","city"), ~case_when(str_detect(., "[:alpha:]") ~ 1,
+                                                         TRUE ~ 0)) %>%
+      rename_at(c("country", "state","city"),  ~str_c(., "_", "present")) %>%
       mutate_all(na_if, "") %>%
-      mutate_all(na_if, "NA")%>%
-      mutate_if(is.character, list(~replace_na(., "unknown"))) %>%
-      mutate(fraudulent = forcats::fct_rev(as.character(fraudulent))) %>% #factor conversion needed for step_smote in recipe section
-      mutate(employment_type = as_factor(employment_type), required_experience = as_factor(required_experience),
-             required_education = as_factor(required_education))%>%
-      select(-department, -salary_range, -benefits, -industry, -`function`, -country, -state, -city)%>%
+      mutate_all(na_if, "NA") %>%
+      mutate_if(is.character, list(~replace_na(., "unknown"))) %>% 
+      #factor conversion needed for step_smote in recipe section for fraudulent/target variable
+      mutate_at(c("employment_type", "required_experience","required_education", "fraudulent"), ~as_factor(.))  %>%
+      select(-salary_range)  %>%
       mutate_if(is.character, str_trim)%>% #get rid of white space in some character columns
       clean_names()
 
